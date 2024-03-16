@@ -26,38 +26,17 @@ export default function Home() {
         navigation.navigate('Scanner');
     };
 
-    const getUserData = async () => {
-        try {
-            const userId = await AsyncStorage.getItem('userId');
-            const response = await fetch(`${API_URL}/Login/obtenerUsuario`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                },
-                body: `id=${userId}`,
-            });
-            const data = await response.json();
-            if (data.success) {
-                console.log(data.message);
-            } else {
-                console.log(data.message);
-            }
-        } catch (error) {
-            console.error('Error al obtener los datos del usuario:', error);
-            // Manejar errores de conexión u otros errores
-        }
-    };
-
     const getEstanques = async () => {
         try {
             const userId = await AsyncStorage.getItem('userId');
+            const formData = new FormData();
+            formData.append('idUser', userId);
+
             const response = await fetch(`${API_URL}/Estanques/obtenerEstanques`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                },
-                body: `id=${userId}`,
+                body: formData,
             });
+
             const data = await response.json();
             if (data.success) {
                 setEstanques(data.estanques);
@@ -69,9 +48,9 @@ export default function Home() {
         }
     };
 
+
     useEffect(() => {
         getEstanques();
-        getUserData();
     }, []);
 
 

@@ -17,16 +17,16 @@ export default function Auto({ route }) {
     const cancelar = () => {
         navigation.navigate('Home');
     };
-
     const continuar = async () => {
         try {
-            const idEstanque = await AsyncStorage.getItem('idEstanque');
+            const userId = await AsyncStorage.getItem('userId');
             const data = {
                 nombre: name,
                 idPez: selectedFish,
-                idVenta: detalleVentaId
+                idVenta: detalleVentaId,
+                idUser: userId
             };
-            console.log(data);
+
             const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
             const response = await fetch(`${API_URL}/Estanques/registrarEstanque`, {
                 method: 'POST',

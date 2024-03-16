@@ -117,6 +117,7 @@ export default function Login() {
                 alert('Se produjo un error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.');
             });
     };
+    
     const isValidEmail = (email) => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailPattern.test(email);
