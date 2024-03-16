@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "hydroward-mobil",
+    "scheme": "scheme",
+    "slug": "hydroward-mobil",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/HydroWard.jpg",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/HydroWard.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.emaus025.hydroward"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
