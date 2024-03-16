@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../styles/colors';
 import { Camera } from 'expo-camera';
+import { API_URL } from './../config/url';
 
 export default function Scanner() {
     const navigation = useNavigation();
@@ -14,7 +15,7 @@ export default function Scanner() {
 
     const handleQrCode = async () => {
         try {
-            const response = await fetch('http://192.168.100.79/hydroward_back/back/ObtenerQrCode', {
+            const response = await fetch(`${API_URL}/Estanques/ObtenerQrCode`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -27,9 +28,10 @@ export default function Scanner() {
                 if (data.error) {
                     console.log('Error al obtener los datos del QR:', data.error);
                 } else {
-                    await AsyncStorage.setItem('idVenta', data.venta.toString());
                     console.log('Datos del QR:', data.venta);
-                    navigation.navigate("Seleccion");
+                    const detalleVentaId = data.venta;
+                    // Navegar a la pantalla de selección con el id de detalle venta
+                    navigation.navigate("Seleccion", { detalleVentaId });
                 }
             } else {
                 console.log('Error en la solicitud:', response.statusText);
@@ -72,7 +74,7 @@ export default function Scanner() {
                             </Text>
                             <Camera
                                 style={styles.camera}
-                                type={Camera.Constants.Type.back}
+                                type={Camera.Constants.Type.front}
                                 onBarCodeScanned={!scanned ? handleBarCodeScanned : undefined}
                             />
                             <TextInput
@@ -80,7 +82,7 @@ export default function Scanner() {
                                 placeholder="Código de sistema"
                                 value={qrData}
                                 onChangeText={setQrData}
-                                maxLength={6}
+                                maxLength={13}
                             />
                             <TouchableOpacity style={styles.button} onPress={handleQrCode}>
                                 <Text style={styles.buttonText}>Aceptar</Text>

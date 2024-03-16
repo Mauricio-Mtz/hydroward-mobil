@@ -4,6 +4,7 @@ import { colors } from '../styles/colors';
 import Navbar from '../components/Navbar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { API_URL } from './../config/url';
 
 export default function Profile() {
   const navigation = useNavigation();
@@ -20,30 +21,31 @@ export default function Profile() {
   }, []);
 
   const getUserData = async () => {
-    try {
-      const userId = await AsyncStorage.getItem('userId');
-      const response = await fetch('http://192.168.100.79/hydroward_back/back/obtenerUsuarioM', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        },
-        body: `id=${userId}`,
+    const userId = await AsyncStorage.getItem('userId');
+    fetch(`${API_URL}/Login/obtenerUsuario`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      },
+      body: `id=${userId}`,
+    })
+      .then(response => response.json())
+      .then(async data => {
+        if (data.success) {
+          setUserData({
+            nombre: data.user.nombre,
+            apellido: data.user.apellido,
+            correo: data.user.correo,
+            telefono: data.user.telefono,
+            tipo: data.user.tipo
+          });
+        } else {
+          console.log(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos del usuario:', error);
       });
-      const data = await response.json();
-      if (data.success) {
-        setUserData({
-          nombre: data.user.nombre,
-          apellido: data.user.apellido,
-          correo: data.user.correo,
-          telefono: data.user.telefono,
-          tipo: data.user.tipo
-        });
-      } else {
-        console.log(data.message);
-      }
-    } catch (error) {
-      console.error('Error al obtener los datos del usuario:', error);
-    }
   };
 
 

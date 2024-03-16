@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../styles/colors';
 import * as Google from 'expo-auth-session/providers/google';
+import { API_URL } from './../config/url';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -11,65 +12,65 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const navigation = useNavigation();
     const [registroExitoso, setRegistroExitoso] = useState(false);
-    
-    
+
+
     const [userInfo, setUserInfo] = useState(null);
 
- /*   const [request, response, promptAsync] = Google.useAuthRequest({
-        webClientId:
-            "610496027106-aml6c0slp7gh1e4sj98qreajkgbimfmg.apps.googleusercontent.com",
-        iosClientId:
-            "610496027106-v4gctcf53na6u798l87eciunt10ednqe.apps.googleusercontent.com",
-        androidClientId:
-            "610496027106-0q5fq56ahcpn3muhammavsrgrncdhqc2.apps.googleusercontent.com",
-    });
-
-    useEffect(() => {
-        handleSignInGoogle();
-    }, [response])
-
-    async function handleSignInGoogle() {
-        const user = await getLocalUser();
-        if (!user) {
-            if (response?.type === "success") {
-                getUserInfo(response.authentication.accessToken);
-            }
-        } else {
-            setUserInfo(user);
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Home' }],
-            });
-        }
-    }
-
-    const getLocalUser = async () => {
-        const data = await AsyncStorage.getItem("@User");
-        if (!data) return null;
-        return JSON.parse(data);
-    }
-
-    const getUserInfo = async (token) => {
-        if (!token) return;
-        try {
-            const response = await fetch(
-                "https://www.googleapis.com/userinfo/v2/me",
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            );
-            const user = await request.json();
-            await AsyncStorage.setItem("@User", JSON.stringify(user));
-            setUserInfo(user);
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Home' }],
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-*/
+    /*   const [request, response, promptAsync] = Google.useAuthRequest({
+           webClientId:
+               "610496027106-aml6c0slp7gh1e4sj98qreajkgbimfmg.apps.googleusercontent.com",
+           iosClientId:
+               "610496027106-v4gctcf53na6u798l87eciunt10ednqe.apps.googleusercontent.com",
+           androidClientId:
+               "610496027106-0q5fq56ahcpn3muhammavsrgrncdhqc2.apps.googleusercontent.com",
+       });
+   
+       useEffect(() => {
+           handleSignInGoogle();
+       }, [response])
+   
+       async function handleSignInGoogle() {
+           const user = await getLocalUser();
+           if (!user) {
+               if (response?.type === "success") {
+                   getUserInfo(response.authentication.accessToken);
+               }
+           } else {
+               setUserInfo(user);
+               navigation.reset({
+                   index: 0,
+                   routes: [{ name: 'Home' }],
+               });
+           }
+       }
+   
+       const getLocalUser = async () => {
+           const data = await AsyncStorage.getItem("@User");
+           if (!data) return null;
+           return JSON.parse(data);
+       }
+   
+       const getUserInfo = async (token) => {
+           if (!token) return;
+           try {
+               const response = await fetch(
+                   "https://www.googleapis.com/userinfo/v2/me",
+                   {
+                       headers: { Authorization: `Bearer ${token}` },
+                   }
+               );
+               const user = await request.json();
+               await AsyncStorage.setItem("@User", JSON.stringify(user));
+               setUserInfo(user);
+               navigation.reset({
+                   index: 0,
+                   routes: [{ name: 'Home' }],
+               });
+           } catch (error) {
+               console.log(error);
+           }
+       }
+   */
     const Registro = () => {
         navigation.navigate('Registro');
     };
@@ -89,7 +90,7 @@ export default function Login() {
 
         const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
 
-        fetch('http://192.168.100.79/hydroward_back/back/loginM', {
+        fetch(`${API_URL}/Login/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -101,8 +102,8 @@ export default function Login() {
                 console.log('Respuesta del servidor:', data);
                 if (data.success) {
                     // Guardar datos de sesión en AsyncStorage
-                    await AsyncStorage.setItem('userId', data.user_id.toString());
-                    await AsyncStorage.setItem('userType', data.user_type.toString());
+                    await AsyncStorage.setItem('userId', data.usuario.id.toString());
+                    await AsyncStorage.setItem('userType', data.usuario.tipo.toString());
                     navigation.reset({
                         index: 0,
                         routes: [{ name: 'Home' }],

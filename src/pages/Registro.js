@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView,
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../styles/colors';
+import { API_URL } from './../config/url';
 
 export default function Registro() {
     const [name, setName] = useState('');
@@ -49,7 +50,7 @@ export default function Registro() {
 
         const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
 
-        fetch('http://192.168.100.79/hydroward_back/back/signIn', {
+        fetch(`${API_URL}/Login/signIn`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',

@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../styles/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from './../config/url';
 
 export default function Home() {
     const navigation = useNavigation();
@@ -19,7 +20,7 @@ export default function Home() {
             console.error('Error al guardar el ID del estanque:', error);
         }
     };
-    
+
 
     const goToScanner = () => {
         navigation.navigate('Scanner');
@@ -28,7 +29,7 @@ export default function Home() {
     const getUserData = async () => {
         try {
             const userId = await AsyncStorage.getItem('userId');
-            const response = await fetch('http://192.168.100.79/hydroward_back/back/obtenerUsuarioM', {
+            const response = await fetch(`${API_URL}/Login/obtenerUsuario`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -50,7 +51,7 @@ export default function Home() {
     const getEstanques = async () => {
         try {
             const userId = await AsyncStorage.getItem('userId');
-            const response = await fetch('http://192.168.100.79/hydroward_back/back/obtenerEstanques', {
+            const response = await fetch(`${API_URL}/Estanques/obtenerEstanques`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',

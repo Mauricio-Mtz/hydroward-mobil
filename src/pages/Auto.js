@@ -3,11 +3,16 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'rea
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../styles/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from './../config/url';
 
-export default function Auto() {
+export default function Auto({ route }) {
+    const { detalleVentaId, name } = route.params;
     const navigation = useNavigation();
     const [selectedFish, setSelectedFish] = useState();
     const [fishData, setFishData] = useState([]);
+
+    console.log("Detalle venta: " + detalleVentaId)
+    console.log("Nombre:        " + name)
 
     const cancelar = () => {
         navigation.navigate('Home');
@@ -17,12 +22,13 @@ export default function Auto() {
         try {
             const idEstanque = await AsyncStorage.getItem('idEstanque');
             const data = {
-                fish: selectedFish,
-                estanque: idEstanque,
+                nombre: name,
+                idPez: selectedFish,
+                idVenta: detalleVentaId
             };
             console.log(data);
             const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
-            const response = await fetch('http://192.168.100.79/hydroward_back/back/registrarPezEstanque', {
+            const response = await fetch(`${API_URL}/Estanques/registrarEstanque`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -49,7 +55,7 @@ export default function Auto() {
 
     const getFish = async () => {
         try {
-            const response = await fetch('http://192.168.100.79/hydroward_back/back/obtenerPeces');
+            const response = await fetch(`${API_URL}/Estanques/obtenerPeces`);
             if (response.ok) {
                 const data = await response.json();
                 setFishData(data);

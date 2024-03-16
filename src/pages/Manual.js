@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../styles/colors';
+import { API_URL } from './../config/url';
 
 export default function Manual() {
     const navigation = useNavigation();
@@ -20,7 +21,7 @@ export default function Manual() {
     const getUserData = async () => {
         try {
             const userId = await AsyncStorage.getItem('userId');
-            const response = await fetch('http://192.168.100.79/hydroward_back/back/obtenerUsuario', {
+            const response = await fetch(`${API_URL}/Login/obtenerUsuario`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -41,7 +42,7 @@ export default function Manual() {
     const getEstanque = async () => {
         try {
             const estanque = await AsyncStorage.getItem('idEM');
-            const response = await fetch('http://192.168.100.79/hydroward_back/back/obtenerEstanqueC', {
+            const response = await fetch(`${API_URL}/Estanques/obtenerEstanqueC`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -119,7 +120,7 @@ export default function Manual() {
             console.log('Datos a enviar al servidor:', data);
             const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
             console.log('Formulario a enviar al servidor:', formBody);
-            const response = await fetch('http://192.168.100.79/hydroward_back/back/editarEstanque', {
+            const response = await fetch(`${API_URL}/Estanques/editarEstanque`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',

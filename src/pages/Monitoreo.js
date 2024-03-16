@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../styles/colors';
+import { API_URL } from './../config/url';
 
 export default function Monitoreo() {
     const navigation = useNavigation();
@@ -19,7 +20,7 @@ export default function Monitoreo() {
     const getUserData = async () => {
         try {
             const userId = await AsyncStorage.getItem('userId');
-            const response = await fetch('http://192.168.100.79/hydroward_back/back/obtenerUsuario', {
+            const response = await fetch(`${API_URL}/Login/obtenerUsuario`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -40,7 +41,7 @@ export default function Monitoreo() {
     const getEstanque = async () => {
         try {
             const estanque = await AsyncStorage.getItem('estanqueC');
-            const response = await fetch('http://192.168.100.79/hydroward_back/back/obtenerEstanqueC', {
+            const response = await fetch(`${API_URL}/back/obtenerEstanqueC`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
