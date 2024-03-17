@@ -15,19 +15,33 @@ export default function Scanner() {
 
     const handleQrCode = async () => {
         try {
+            const userId = await AsyncStorage.getItem('userId');
+            const data = {
+                qrCode: qrData,
+                idUser: userId
+            };
+            const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
             const response = await fetch(`${API_URL}/Estanques/ObtenerQrCode`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
                 },
-                body: `qrCode=${qrData}`,
+                body: formBody,
             });
             if (response.ok) {
                 const data = await response.json();
                 if (data.success) {
-                    const detalleVentaId = data.venta;
-                    // Navegar a la pantalla de selección con el id de detalle venta
-                    navigation.navigate("Seleccion", { detalleVentaId });
+                    console.log(data)
+                    if (data.venta.existeEnEstanques) {
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'Home' }],
+                        });
+                    } else {
+                        const detalleVentaId = data.venta.detalleVentaId;
+                        // Navegar a la pantalla de selección con el id de detalle venta
+                        navigation.navigate("Seleccion", { detalleVentaId });
+                    }
                 } else {
                     alert(data.message);
                 }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../styles/colors';
 import { API_URL } from './../config/url';
@@ -17,27 +16,6 @@ export default function Monitoreo({ route }) {
     const Conteo = () => {
         navigation.navigate('Conteo');
     };
-
-    // const getUserData = async () => {
-    //     try {
-    //         const userId = await AsyncStorage.getItem('userId');
-    //         const response = await fetch(`${API_URL}/Login/obtenerUsuario`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    //             },
-    //             body: `id=${userId}`,
-    //         });
-    //         const data = await response.json();
-    //         if (data.success) {
-    //             console.log(data.message);
-    //         } else {
-    //             console.log(data.message);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error al obtener los datos del usuario:', error);
-    //     }
-    // };
     
     const getEstanque = async () => {
         try {
@@ -75,7 +53,6 @@ export default function Monitoreo({ route }) {
 
     useEffect(() => {
         getEstanque();
-        // getUserData();
     }, []);
 
     return (
