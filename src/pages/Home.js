@@ -12,14 +12,13 @@ export default function Home() {
 
 
     const goToMonitoreo = async (estanqueId) => {
-        console.log('Estanque seleccionado: ' + estanqueId);
         try {
-            await AsyncStorage.setItem('estanqueC', estanqueId.toString());
-            navigation.navigate('Monitoreo');
+            navigation.navigate('Monitoreo', { estanqueId });
         } catch (error) {
             console.error('Error al guardar el ID del estanque:', error);
         }
     };
+    
 
 
     const goToScanner = () => {
@@ -41,7 +40,7 @@ export default function Home() {
             if (data.success) {
                 setEstanques(data.estanques);
             } else {
-                console.log(data.message);
+                alert(data.message)
             }
         } catch (error) {
             console.error('Error al obtener los datos de los estanques:', error);
@@ -69,7 +68,7 @@ export default function Home() {
                                         <Image source={require('../../assets/images/salmon.png')} style={styles.cardImage} />
                                         <View style={styles.cardContent}>
                                             <Text style={[styles.cardTitle, { color: colors.lightText }]}>{estanque.nombre}</Text>
-                                            <TouchableOpacity style={styles.button} onPress={() => goToMonitoreo(estanque.id)}>
+                                            <TouchableOpacity style={styles.button} onPress={() => goToMonitoreo(estanque.estanque_id)}>
                                                 <Text style={styles.buttonText}>Monitoreo</Text>
                                             </TouchableOpacity>
                                         </View>

@@ -12,7 +12,7 @@ export default function Seleccion({ route }) {
 
   const handleOptionPress = (option) => {
     try {
-      if (name !== '' && detalleVentaId) { // Verifica que detalleVentaId tenga un valor válido
+      if (name !== '' && detalleVentaId) {
         if (option === 'Automática') {
           navigation.navigate('Auto', { detalleVentaId, name });
         } else {

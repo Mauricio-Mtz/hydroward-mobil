@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../styles/colors';
 import { API_URL } from './../config/url';
 
-export default function Manual() {
+export default function Manual({ route }) {
     const navigation = useNavigation();
-    const [estanques, setEstanques] = useState([]);
+    const { detalleVentaId, name } = route.params;
     const [alimentacion, setAlimentacion] = useState('');
     const [liberacionAlimento, setLiberacionAlimento] = useState('');
     const [durante, setDurante] = useState('');
@@ -15,74 +15,6 @@ export default function Manual() {
     const [tempMax, setTempMax] = useState('');
     const [phMin, setPhMin] = useState('');
     const [phMax, setPhMax] = useState('');
-    const [cantidad, setCantidad] = useState('');
-    const [nombre, setNombre] = useState('');
-
-    const getUserData = async () => {
-        try {
-            const userId = await AsyncStorage.getItem('userId');
-            const response = await fetch(`${API_URL}/Login/obtenerUsuario`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                },
-                body: `id=${userId}`,
-            });
-            const data = await response.json();
-            if (data.success) {
-                console.log(data.message);
-            } else {
-                console.log(data.message);
-            }
-        } catch (error) {
-            console.error('Error al obtener los datos del usuario:', error);
-        }
-    };
-
-    const getEstanque = async () => {
-        try {
-            const estanque = await AsyncStorage.getItem('idEM');
-            const response = await fetch(`${API_URL}/Estanques/obtenerEstanqueC`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                },
-                body: `id=${estanque}`,
-            });
-            const data = await response.json();
-            if (data.success) {
-                const estanquesData = data.estanques.map(estanque => {
-                    setAlimentacion(estanque.alimentacion);
-                    setLiberacionAlimento(estanque.no_alim);
-                    setDurante(estanque.si_alim);
-                    setCantidad(estanque.cantidad);
-                    setPhMax(estanque.ph_max);
-                    setPhMin(estanque.ph_min);
-                    setTempMax(estanque.temp_max);
-                    setTempMin(estanque.temp_min);
-                    setNombre(estanque.nombre);
-
-                    return {
-                        nombre: estanque.nombre,
-                        id: estanque.id,
-                        maxTemp: estanque.temp_max,
-                        minTemp: estanque.temp_min,
-                        alimentacion: estanque.alimentacion,
-                        tiempo_si_alim: estanque.si_alim,
-                        tiempo_no_alim: estanque.no_alim,
-                        maxPh: estanque.ph_max,
-                        minPh: estanque.ph_min,
-                        cantidad: estanque.cantidad,
-                    };
-                });
-                setEstanques(estanquesData);
-            } else {
-                console.log(data.message);
-            }
-        } catch (error) {
-            console.error('Error al obtener los datos de los estanques:', error);
-        }
-    };
 
     const guardar = async () => {
 
@@ -93,41 +25,34 @@ export default function Manual() {
             !tempMin ||
             !tempMax ||
             !phMin ||
-            !phMax ||
-            !cantidad ||
-            !nombre
+            !phMax
         ) {
             alert('Por favor complete todos los campos.');
-            console.log(alimentacion,liberacionAlimento,durante,tempMax,tempMin,phMax,phMin,cantidad,nombre);
             return;
         }
 
         try {
-            const estanque = await AsyncStorage.getItem('idEM');
+            const userId = await AsyncStorage.getItem('userId');
             const data = {
-                estanque: estanque,
+                nombre: name,
                 alimentacion: alimentacion,
-                tempMax: tempMax,
                 noAlim: liberacionAlimento,
                 siAlim: durante,
                 tempMin: tempMin,
-                phMax: phMax,
+                tempMax: tempMax,
                 phMin: phMin,
-                cantidad: cantidad,
-                nombre: nombre,
-                pez: 0,
+                phMax: phMax,
+                idVenta: detalleVentaId,
+                idUser: userId
             };
-            console.log('Datos a enviar al servidor:', data);
             const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
-            console.log('Formulario a enviar al servidor:', formBody);
-            const response = await fetch(`${API_URL}/Estanques/editarEstanque`, {
+            const response = await fetch(`${API_URL}/Estanques/registrarEstanqueManual`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
                 },
                 body: formBody,
             });
-            console.log(response.data);
             if (response.ok) {
                 await AsyncStorage.setItem('idEM', '');
                 navigation.reset({
@@ -144,119 +69,86 @@ export default function Manual() {
         }
     };
 
-
-
-    useEffect(() => {
-        getEstanque();
-        getUserData();
-    }, []);
-
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-                {estanques.map((estanque, index) => (
-                    <View style={styles.section} key={index}>
-                        <View style={styles.cardContainer}>
-                            <View style={styles.card}>
-                                <Text style={styles.cardTitle}>Estanque</Text>
-                                <Text style={styles.subtitle}>Nombre:</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder={estanque.nombre ? estanque.nombre.toString() : 'Sin asignar'}
-                                    placeholderTextColor={colors.light}
-                                    onChangeText={setNombre}
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.cardContainer}>
-                            <View style={styles.card}>
-                                <Text style={styles.cardTitle}>Alimentación</Text>
-                                <Text style={styles.subtitle}>Tipo de alimentación:</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder={estanque.alimentacion ? estanque.alimentacion.toString() : 'Sin asignar'}
-                                    placeholderTextColor={colors.light}
-                                    onChangeText={setAlimentacion}
-                                />
-                                <Text style={styles.subtitle}>Liberación de alimento:</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder={estanque.tiempo_no_alim ? 'Cada ' + estanque.tiempo_no_alim.toString() + ':00 horas' : 'Sin asignar'}
-                                    placeholderTextColor={colors.light}
-                                    onChangeText={setLiberacionAlimento}
-                                    keyboardType='numeric'
-                                />
-                                <Text style={styles.subtitle}>Durante:</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder={estanque.tiempo_si_alim ? estanque.tiempo_si_alim.toString() + ':00 horas' : 'Sin asignar'}
-                                    placeholderTextColor={colors.light}
-                                    onChangeText={setDurante}
-                                    keyboardType='numeric'
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.cardContainer}>
-                            <View style={styles.card}>
-                                <Text style={styles.cardTitle}>Temperatura</Text>
-                                <Text style={styles.subtitle}>Temperatura mínima:</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder={estanque.minTemp ? estanque.minTemp.toString() + 'C°' : 'Sin asignar'}
-                                    placeholderTextColor={colors.light}
-                                    onChangeText={setTempMin}
-                                    keyboardType='decimal-pad'
-                                />
-                                <Text style={styles.subtitle}>Temperatura máxima:</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder={estanque.maxTemp ? estanque.minTemp.toString() + 'C°' : 'Sin asignar'}
-                                    placeholderTextColor={colors.light}
-                                    onChangeText={setTempMax}
-                                    keyboardType='decimal-pad'
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.cardContainer}>
-                            <View style={styles.card}>
-                                <Text style={styles.cardTitle}>Ph</Text>
-                                <Text style={styles.subtitle}>Ph mínimo:</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder={estanque.minTemp ? 'Ph = ' + estanque.minPh.toString() : 'Sin asignar'}
-                                    placeholderTextColor={colors.light}
-                                    onChangeText={setPhMin}
-                                    keyboardType='decimal-pad'
-                                />
-                                <Text style={styles.subtitle}>Ph máximo:</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder={estanque.minTemp ? 'Ph = ' + estanque.maxPh.toString() : 'Sin asignar'}
-                                    placeholderTextColor={colors.light}
-                                    onChangeText={setPhMax}
-                                    keyboardType='decimal-pad'
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.cardContainer}>
-                            <View style={styles.card}>
-                                <Text style={styles.cardTitle}>Conteo</Text>
-                                <Text style={styles.subtitle}>Número de peces:</Text>
-                                <TextInput style={styles.input}
-                                    placeholder={estanque.cantidad ? estanque.cantidad.toString() : 'Sin asignar'}
-                                    placeholderTextColor={colors.light}
-                                    onChangeText={setCantidad}
-                                    keyboardType='numeric'
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.footer}>
-                            <TouchableOpacity onPress={guardar} style={[styles.footerButton, { backgroundColor: colors.successText }]}>
-                                <Text style={styles.footerButtonText}>Guardar</Text>
-                            </TouchableOpacity>
+                <View style={styles.section}>
+                    <View style={styles.cardContainer}>
+                        <View style={styles.card}>
+                            <Text style={styles.cardTitle}>Alimentación</Text>
+                            <Text style={styles.subtitle}>Tipo de alimentación:</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Tipo de alimentación"
+                                placeholderTextColor={colors.light}
+                                onChangeText={setAlimentacion}
+                            />
+                            <Text style={styles.subtitle}>Tiempo de compuerta abierta:</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Liberación de alimento"
+                                placeholderTextColor={colors.light}
+                                onChangeText={setLiberacionAlimento}
+                                keyboardType='numeric'
+                            />
+                            <Text style={styles.subtitle}>Tiempo de compuerta cerrada:</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Durante"
+                                placeholderTextColor={colors.light}
+                                onChangeText={setDurante}
+                                keyboardType='numeric'
+                            />
                         </View>
                     </View>
-                ))}
+                    <View style={styles.cardContainer}>
+                        <View style={styles.card}>
+                            <Text style={styles.cardTitle}>Temperatura</Text>
+                            <Text style={styles.subtitle}>Temperatura mínima:</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Temperatura mínima"
+                                placeholderTextColor={colors.light}
+                                onChangeText={setTempMin}
+                                keyboardType='decimal-pad'
+                            />
+                            <Text style={styles.subtitle}>Temperatura máxima:</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Temperatura máxima"
+                                placeholderTextColor={colors.light}
+                                onChangeText={setTempMax}
+                                keyboardType='decimal-pad'
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.cardContainer}>
+                        <View style={styles.card}>
+                            <Text style={styles.cardTitle}>PH</Text>
+                            <Text style={styles.subtitle}>PH mínimo:</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Ph mínimo"
+                                placeholderTextColor={colors.light}
+                                onChangeText={setPhMin}
+                                keyboardType='decimal-pad'
+                            />
+                            <Text style={styles.subtitle}>PH máximo:</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Ph máximo"
+                                placeholderTextColor={colors.light}
+                                onChangeText={setPhMax}
+                                keyboardType='decimal-pad'
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.footer}>
+                        <TouchableOpacity onPress={guardar} style={[styles.footerButton, { backgroundColor: colors.successText }]}>
+                            <Text style={styles.footerButtonText}>Guardar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </ScrollView>
         </View>
     );

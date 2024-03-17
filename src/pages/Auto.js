@@ -11,9 +11,6 @@ export default function Auto({ route }) {
     const [selectedFish, setSelectedFish] = useState();
     const [fishData, setFishData] = useState([]);
 
-    console.log("Detalle venta: " + detalleVentaId)
-    console.log("Nombre:        " + name)
-
     const cancelar = () => {
         navigation.navigate('Home');
     };
@@ -43,7 +40,7 @@ export default function Auto({ route }) {
                 });
                 alert('¡Registro Exitoso!')
             } else {
-                alert('¡Ha ocurrido un error en la solicituuuuuuuuud!');
+                alert('¡Ha ocurrido un error en la solicitud!');
             }
         } catch (error) {
             console.error('Ha ocurrido un error:', error);
@@ -84,7 +81,7 @@ export default function Auto({ route }) {
                     <View style={styles.cardContainer} key={index}>
                         <TouchableOpacity
                             style={[styles.card, selectedFish === fish.id && styles.selectedCard]}
-                            onPress={() => { console.log(selectedFish); setSelectedFish(fish.id); }}
+                            onPress={() => { setSelectedFish(fish.id); }}
                         >
 
                             {/*<Image source={{ uri: `../../assets/images/${fish.imagen}` }} style={styles.cardImage} />*/}

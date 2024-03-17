@@ -5,8 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { colors } from '../styles/colors';
 import { API_URL } from './../config/url';
 
-export default function Monitoreo() {
+export default function Monitoreo({ route }) {
     const navigation = useNavigation();
+    const { estanqueId } = route.params;
     const [estanques, setEstanques] = useState([]);
 
     const Editar = () => {
@@ -17,39 +18,39 @@ export default function Monitoreo() {
         navigation.navigate('Conteo');
     };
 
-    const getUserData = async () => {
-        try {
-            const userId = await AsyncStorage.getItem('userId');
-            const response = await fetch(`${API_URL}/Login/obtenerUsuario`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                },
-                body: `id=${userId}`,
-            });
-            const data = await response.json();
-            if (data.success) {
-                console.log(data.message);
-            } else {
-                console.log(data.message);
-            }
-        } catch (error) {
-            console.error('Error al obtener los datos del usuario:', error);
-        }
-    };
-
+    // const getUserData = async () => {
+    //     try {
+    //         const userId = await AsyncStorage.getItem('userId');
+    //         const response = await fetch(`${API_URL}/Login/obtenerUsuario`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    //             },
+    //             body: `id=${userId}`,
+    //         });
+    //         const data = await response.json();
+    //         if (data.success) {
+    //             console.log(data.message);
+    //         } else {
+    //             console.log(data.message);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error al obtener los datos del usuario:', error);
+    //     }
+    // };
+    
     const getEstanque = async () => {
         try {
-            const estanque = await AsyncStorage.getItem('estanqueC');
-            const response = await fetch(`${API_URL}/back/obtenerEstanqueC`, {
+            const formData = new FormData();
+            formData.append('idEstanque', estanqueId);
+            
+            const response = await fetch(`${API_URL}/Estanques/obtenerEstanqueC`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                },
-                body: `id=${estanque}`,
+                body: formData,
             });
-            console.log(response.data);
             const data = await response.json();
+            console.log(data);
+            
             if (data.success) {
                 const estanquesData = data.estanques.map(estanque => ({
                     nombre: estanque.nombre,
@@ -74,7 +75,7 @@ export default function Monitoreo() {
 
     useEffect(() => {
         getEstanque();
-        getUserData();
+        // getUserData();
     }, []);
 
     return (

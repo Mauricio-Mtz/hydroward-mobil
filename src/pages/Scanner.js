@@ -22,33 +22,27 @@ export default function Scanner() {
                 },
                 body: `qrCode=${qrData}`,
             });
-    
-            console.log(qrData)
             if (response.ok) {
                 const data = await response.json();
                 if (data.success) {
-                    console.log('Datos del QR:', data.venta);
                     const detalleVentaId = data.venta;
                     // Navegar a la pantalla de selección con el id de detalle venta
                     navigation.navigate("Seleccion", { detalleVentaId });
                 } else {
-                    console.log('Error en la solicitud:', data.message);
-                    alert('¡Código inválido!');
+                    alert(data.message);
                 }
             } else {
                 console.log('Error en la solicitud:', response.statusText);
             }
         } catch (error) {
-            console.log('Error al obtener los datos del qr:', error);
             console.error('Error al obtener los datos del qr:', error);
         }
     };
-    
+
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
         setQrData(data);
-        console.log(`Código QR tipo ${type} con datos: ${data}`);
     };
 
     useEffect(() => {
