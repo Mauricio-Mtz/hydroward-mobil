@@ -9,26 +9,22 @@ export default function Monitoreo({ route }) {
     const { estanqueId } = route.params;
     const [estanques, setEstanques] = useState([]);
 
-    const Editar = () => {
-        navigation.navigate('Configuracion');
-    };
-
     const Conteo = () => {
         navigation.navigate('Conteo');
     };
-    
+
     const getEstanque = async () => {
         try {
             const formData = new FormData();
             formData.append('idEstanque', estanqueId);
-            
+
             const response = await fetch(`${API_URL}/Estanques/obtenerEstanqueC`, {
                 method: 'POST',
                 body: formData,
             });
             const data = await response.json();
             console.log(data);
-            
+
             if (data.success) {
                 const estanquesData = data.estanques.map(estanque => ({
                     nombre: estanque.nombre,
@@ -48,6 +44,14 @@ export default function Monitoreo({ route }) {
             }
         } catch (error) {
             console.error('Error al obtener los datos de los estanques:', error);
+        }
+    };
+
+    const goToEditar = async (estanqueId) => {
+        try {
+            navigation.navigate('Configuracion', { estanqueId });
+        } catch (error) {
+            console.error('Error al guardar el ID del estanque:', error);
         }
     };
 
@@ -111,7 +115,7 @@ export default function Monitoreo({ route }) {
                             </View>
                         </View>
                         <View style={styles.btns}>
-                            <TouchableOpacity onPress={Editar} style={[styles.btn, { backgroundColor: colors.warningBorderSubtle }]}>
+                            <TouchableOpacity onPress={() => goToEditar(estanque.id)} style={[styles.btn, { backgroundColor: colors.warningBorderSubtle }]}>
                                 <Text style={styles.btnText}>Editar</Text>
                             </TouchableOpacity>
                         </View>

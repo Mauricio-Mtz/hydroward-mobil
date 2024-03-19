@@ -5,8 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { colors } from '../styles/colors';
 import { API_URL } from './../config/url';
 
-export default function Configuracion() {
+export default function Configuracion({ route }) {
     const navigation = useNavigation();
+    const { estanqueId } = route.params;
     const [estanques, setEstanques] = useState([]);
     const [alimentacion, setAlimentacion] = useState('');
     const [liberacionAlimento, setLiberacionAlimento] = useState('');
@@ -18,7 +19,6 @@ export default function Configuracion() {
     const [cantidad, setCantidad] = useState('');
     const [nombre, setNombre] = useState('');
 
-
     const cancelar = () => {
         navigation.navigate('Home');
     };
@@ -26,7 +26,7 @@ export default function Configuracion() {
     const getUserData = async () => {
         try {
             const userId = await AsyncStorage.getItem('userId');
-            const response = await fetch(`${API_URL}/back/obtenerUsuario`, {
+            const response = await fetch(`${API_URL}/Login/obtenerUsuario`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -46,13 +46,13 @@ export default function Configuracion() {
 
     const getEstanque = async () => {
         try {
-            const estanque = await AsyncStorage.getItem('estanqueC');
-            const response = await fetch(`${API_URL}/back/obtenerEstanqueC`, {
+            console.log(estanqueId)
+            const response = await fetch(`${API_URL}/Estanques/obtenerEstanqueC`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
                 },
-                body: `id=${estanque}`,
+                body: `idEstanque=${estanqueId}`,
             });
             const data = await response.json();
             if (data.success) {
@@ -91,24 +91,21 @@ export default function Configuracion() {
 
     const guardar = async () => {
         try {
-            const estanque = await AsyncStorage.getItem('estanqueC');
             const data = {
-                estanque: estanque,
+                estanque: estanqueId,
+                nombre: nombre,
                 alimentacion: alimentacion,
                 tempMax: tempMax,
                 noAlim: liberacionAlimento,
                 siAlim: durante,
                 tempMin: tempMin,
                 phMax: phMax,
-                phMin: phMin,
-                cantidad: cantidad,
-                nombre: nombre,
-                pez: 0,
+                phMin: phMin
             };
             console.log('Datos a enviar al servidor:', data);
             const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
             console.log('Formulario a enviar al servidor:', formBody);
-            const response = await fetch(`${API_URL}/back/editarEstanque`, {
+            const response = await fetch(`${API_URL}/Estanques/editarEstanque`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -130,8 +127,6 @@ export default function Configuracion() {
             alert('¡Ha ocurrido un error en la solicitud!');
         }
     };
-
-
 
     useEffect(() => {
         getEstanque();
@@ -222,18 +217,6 @@ export default function Configuracion() {
                                     placeholderTextColor={colors.light}
                                     onChangeText={setPhMax}
                                     keyboardType='decimal-pad'
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.cardContainer}>
-                            <View style={styles.card}>
-                                <Text style={styles.cardTitle}>Conteo</Text>
-                                <Text style={styles.subtitle}>Número de peces:</Text>
-                                <TextInput style={styles.input}
-                                    placeholder={estanque.cantidad ? estanque.cantidad.toString() : 'Sin asignar'}
-                                    placeholderTextColor={colors.light}
-                                    onChangeText={setCantidad}
-                                    keyboardType='numeric'
                                 />
                             </View>
                         </View>
