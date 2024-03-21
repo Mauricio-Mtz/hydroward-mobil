@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.bodyBg,
-        padding: 20,
+        paddingTop: 20,
     },
     section: {
         marginBottom: 20,
@@ -247,10 +247,10 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: colors.lightBg,
         borderRadius: 10,
-        borderWidth: 1,
+        borderWidth: 3,
         borderColor: colors.borderColor,
         padding: 10,
-        margin: 15,
+        marginBottom: 10
     },
     cardContainer: {
         paddingHorizontal: 20,
@@ -327,14 +327,16 @@ const styles = StyleSheet.create({
     footer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        paddingLeft: 25,
+        paddingRight: 25
     },
     footerButton: {
         borderRadius: 5,
         paddingVertical: 12,
-        paddingHorizontal: 20,
-        width: '48%',
+        width: '50%',
         alignItems: 'center',
         justifyContent: 'center',
+        margin: 2
     },
     footerButtonText: {
         color: colors.lightText,

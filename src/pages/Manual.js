@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.bodyBg,
-        padding: 20,
     },
     section: {
         marginBottom: 20,
@@ -169,7 +168,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.borderColor,
         padding: 10,
-        margin: 15,
+        marginTop: 15,
+        marginBottom: 15,
     },
     cardContainer: {
         paddingHorizontal: 20,

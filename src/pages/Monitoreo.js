@@ -115,7 +115,7 @@ export default function Monitoreo({ route }) {
                             </View>
                         </View>
                         <View style={styles.btns}>
-                            <TouchableOpacity onPress={() => goToEditar(estanque.id)} style={[styles.btn, { backgroundColor: colors.warningBorderSubtle }]}>
+                            <TouchableOpacity onPress={() => goToEditar(estanque.id)} style={[styles.btnFooter, { backgroundColor: colors.warningBorderSubtle }]}>
                                 <Text style={styles.btnText}>Editar</Text>
                             </TouchableOpacity>
                         </View>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.bodyBg,
-        padding: 20,
+        paddingTop: 20
     },
     section: {
         marginBottom: 20,
@@ -138,10 +138,10 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: colors.lightBg,
         borderRadius: 10,
-        borderWidth: 1,
+        borderWidth: 3,
         borderColor: colors.borderColor,
         padding: 10,
-        margin: 15,
+        marginBottom: 10
     },
     cardContainer: {
         paddingHorizontal: 20,
@@ -206,9 +206,17 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 5,
-        width: '80%',
         alignItems: 'center',
         justifyContent: 'center',
+        width: "100%"
+    },
+    btnFooter: {
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: "89%"
     },
     btnText: {
         color: colors.lightText,

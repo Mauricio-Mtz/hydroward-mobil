@@ -18,7 +18,7 @@ export default function Home() {
             console.error('Error al guardar el ID del estanque:', error);
         }
     };
-    
+
 
 
     const goToScanner = () => {
@@ -60,7 +60,7 @@ export default function Home() {
                 <ScrollView contentContainerStyle={styles.scrollViewContainer}>
                     <View style={styles.container}>
                         <View style={styles.header}>
-                            <Text style={[styles.title, { color: colors.lightText }]}>HYDROWARD</Text>
+                            <Text style={[styles.title, { color: colors.lightText }]}>ESTANQUES</Text>
                         </View>
                         <View style={styles.cardContainer}>
                             {estanques.length > 0 ? (
@@ -104,13 +104,13 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
+        textAlign: 'center',
         fontSize: 24,
         fontWeight: 'bold',
     },
     cardContainer: {
         flexDirection: 'column',
         alignItems: 'center',
-        padding: 20,
     },
     cameraContainer: {
         flex: 1,
@@ -159,10 +159,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.lightBgSubtle,
     },
     cardImage: {
-        width: 85,
-        height: 85,
-        borderRadius: 50,
-        marginRight: 15,
+        width: "100%",
+        height: 100
     },
     cardContent: {
         paddingVertical: 15,

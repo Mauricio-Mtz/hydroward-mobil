@@ -84,7 +84,7 @@ export default function Scanner() {
                             </Text>
                             <Camera
                                 style={styles.camera}
-                                type={Camera.Constants.Type.front}
+                                type={Camera.Constants.Type.back}
                                 onBarCodeScanned={!scanned ? handleBarCodeScanned : undefined}
                             />
                             <TextInput
@@ -94,7 +94,11 @@ export default function Scanner() {
                                 onChangeText={setQrData}
                                 maxLength={13}
                             />
-                            <TouchableOpacity style={styles.button} onPress={handleQrCode}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={!scanned ? null : handleQrCode}
+                                disabled={!scanned}
+                            >
                                 <Text style={styles.buttonText}>Aceptar</Text>
                             </TouchableOpacity>
                         </View>

@@ -16,6 +16,10 @@ export default function Auto({ route }) {
     };
     const continuar = async () => {
         try {
+            if (!selectedFish) {
+                alert('Por favor, seleccione un tipo de pez antes de continuar.');
+                return;
+            }
             const userId = await AsyncStorage.getItem('userId');
             const data = {
                 nombre: name,
