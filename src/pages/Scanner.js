@@ -84,7 +84,7 @@ export default function Scanner() {
                             </Text>
                             <Camera
                                 style={styles.camera}
-                                type={Camera.Constants.Type.back}
+                                type={Camera.Constants.Type.front}
                                 onBarCodeScanned={!scanned ? handleBarCodeScanned : undefined}
                             />
                             <TextInput
