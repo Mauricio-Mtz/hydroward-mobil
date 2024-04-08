@@ -12,6 +12,7 @@ import Seleccion from './src/pages/Seleccion';
 import Monitoreo from './src/pages/Monitoreo';
 import Conteo from './src/pages/Conteo';
 import Manual from './src/pages/Manual';
+import Alertas from './src/pages/Alertas';
 import { colors } from './src/styles/colors';
 
 const Stack = createNativeStackNavigator();
@@ -43,6 +44,7 @@ const App = () => {
         <Stack.Screen name="Manual" component={Manual} />
         <Stack.Screen name="Monitoreo" component={Monitoreo} />
         <Stack.Screen name="Conteo" component={Conteo} />
+        <Stack.Screen name="Alertas" component={Alertas} />
       </Stack.Navigator>
     </NavigationContainer>
   );

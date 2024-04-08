@@ -10,7 +10,6 @@ export default function Home() {
     const navigation = useNavigation();
     const [estanques, setEstanques] = useState([]);
 
-
     const goToMonitoreo = async (estanqueId) => {
         try {
             navigation.navigate('Monitoreo', { estanqueId });
@@ -63,7 +62,7 @@ export default function Home() {
                         <View style={styles.cardContainer}>
                             {estanques.length > 0 ? (
                                 estanques.map(estanque => (
-                                    <TouchableOpacity style={styles.card} key={estanque.id} onPress={() => goToMonitoreo(estanque.id)}>
+                                    <TouchableOpacity style={styles.card} key={estanque.id} onPress={() => goToMonitoreo(estanque.estanque_id)}>
                                         <Image source={require('../../assets/images/salmon.png')} style={styles.cardImage} />
                                         <View style={styles.cardContent}>
                                             <Text style={[styles.cardTitle, { color: colors.lightText }]}>{estanque.nombre}</Text>

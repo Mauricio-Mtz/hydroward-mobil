@@ -13,6 +13,9 @@ const Navbar = () => {
   const goToScanner = () => {
     navigation.navigate('Scanner');
   };
+  const goToAlertas = () => {
+    navigation.navigate('Alertas');
+  };
 
   const goToProfile = () => {
     navigation.navigate('Profile');
@@ -25,6 +28,9 @@ const Navbar = () => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem} onPress={goToScanner}>
         <Image source={require('../../assets/images/qr.png')} style={styles.navIcon} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.navItem} onPress={goToAlertas}>
+        <Image source={require('../../assets/images/alertas.png')} style={styles.navIcon} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem} onPress={goToProfile}>
         <Image source={require('../../assets/images/porfile.png')} style={styles.navIcon} />

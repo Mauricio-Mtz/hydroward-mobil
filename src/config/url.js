@@ -1,1 +1,1 @@
-export const API_URL = 'http://192.168.0.13/HydroWardGod/hydroward_back';
+export const API_URL = 'http://192.168.0.8/HydroWardGod/hydroward_back';
